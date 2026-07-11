@@ -6,8 +6,8 @@ const { protect, admin } = require('../middleware/auth');
 router.get('/', getEvents);
 router.get('/:id', getEventById);
 
-router.post('/', protect, admin, createEvent);                    // only for admin dashboard
-router.put('/:id', protect, admin, updateEvent);                  // only for admin dashboard
-router.delete('/:id', protect, admin, deleteEvent);               // only for admin dashboard
+router.post('/', protect, admin, createEvent);                    
+router.put('/:id', protect, admin, updateEvent);                 
+router.delete('/:id', protect, admin, deleteEvent);               
 
 module.exports = router;

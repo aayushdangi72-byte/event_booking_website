@@ -18,7 +18,7 @@ const EventDetail = () => {
     const [successMsg, setSuccessMsg] = useState('');
 
     useEffect(() => {
-        const fetchEvent = async () => {                                   {/* fetch data from /events/id */}
+        const fetchEvent = async () => {                                
             try {
                 const { data } = await api.get(`/events/${id}`);
                 setEvent(data);
@@ -33,7 +33,7 @@ const EventDetail = () => {
         fetchEvent();
     }, [id]);
 
-    const handleBooking = async () => {                                     {/* handle booking at /bookings */}
+    const handleBooking = async () => {                               
         if (!user) {
             navigate('/login');
             return;

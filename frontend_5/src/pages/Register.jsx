@@ -14,7 +14,7 @@ const Register = () => {
     const { register, verifyOTP } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {                             {/* submit at /dashboard */}
+    const handleSubmit = async (e) => {                            
       
         e.preventDefault();
         setLoading(true);

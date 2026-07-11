@@ -23,7 +23,7 @@ const AdminDashboard = () => {
         fetchData();
     }, [user, navigate]);
 
-    const fetchData = async () => {                                        {/* fetch data from /events and /bookings */}
+    const fetchData = async () => {                                      
         try {
             const [eventsRes, bookingsRes] = await Promise.all([
                 api.get('/events'),
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleCreateEvent = async (e) => {                               {/* create event at /events */}
+    const handleCreateEvent = async (e) => {                              
         e.preventDefault();
         try {
             await api.post('/events', formData);
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleDeleteEvent = async (id) => {                              {/* delete event at /events */}               
+    const handleDeleteEvent = async (id) => {                                         
         if (window.confirm('Are you sure you want to delete this event?')) 
           {  try {
                 await api.delete(`/events/${id}`);
@@ -65,7 +65,7 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleConfirmBooking = async (id, paymentStatus) => {            {/* confirm booking at /bookings */}
+    const handleConfirmBooking = async (id, paymentStatus) => {            
         try {
             await api.put(`/bookings/${id}/confirm`, { paymentStatus });
             fetchData();
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleCancelBooking = async (id) => {                            {/* cancle booking at /bookings */}
+    const handleCancelBooking = async (id) => {                         
         if (window.confirm('Cancel this user\'s booking request?')) {
             try {
                 await api.delete(`/bookings/${id}`);

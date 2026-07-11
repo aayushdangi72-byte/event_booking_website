@@ -13,7 +13,7 @@ const Login = () => {
     const { login, verifyOTP } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {                              {/* submit at /admin and /dashboard */}   
+    const handleSubmit = async (e) => {                          
       
     e.preventDefault();
         setLoading(true);

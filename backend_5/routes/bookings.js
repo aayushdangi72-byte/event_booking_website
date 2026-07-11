@@ -6,7 +6,7 @@ const { protect, admin } = require('../middleware/auth');
 router.post('/send-otp', protect, sendBookingOTP);
 router.post('/', protect, bookEvent);
 
-router.put('/:id/confirm', protect, admin, confirmBooking);                //only for admin dashboard
+router.put('/:id/confirm', protect, admin, confirmBooking);               
 router.get('/my', protect, getMyBookings);
 router.delete('/:id', protect, cancelBooking);
 

@@ -5,30 +5,31 @@ const jwt = require('jsonwebtoken');
 const { sendOTPEmail } = require('../utils/email');
 
 
-const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();    //user model mai likhna tha
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();    
 
-const generateToken = (id, role) => {                                                //user model mai likhna tha
+const generateToken = (id, role) => {                                             
     return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
 
 exports.register = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;                            // 1
-        let user = await User.findOne({ email });                                    // 2 user.findone()
+        const { name, email, password, role } = req.body;                           
+        
+        let user = await User.findOne({ email });                                    
         if (user) return res.status(400).json({ message: 'User already exists' });
 
-        const salt = await bcrypt.genSalt(10);                                       //special
+        const salt = await bcrypt.genSalt(10);                                    
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        user = await User.create({                                                    //3
+        user = await User.create({                                              
             name,
             email,
             password: hashedPassword,
-            role: 'user', // Hardcoded to prevent frontend passing role
-            isVerified: false
+            role: 'user',                                                          
+            isVerified: false                                                      
         });
 
-// register ke otp ka logic                                                           //r otp
+// register ke otp send karne ka logic                                                 
 
         const otp = generateOTP();                                                         
 
@@ -36,9 +37,9 @@ exports.register = async (req, res) => {
 
         await sendOTPEmail(email, otp, 'account_verification');                             
 
-        res.status(201).json({                                                         //rcr         
+        res.status(201).json({                                                               
             message: 'OTP sent to email. Please verify.',
-            email: user.email
+            email: user.email                                                       
         });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
@@ -47,26 +48,26 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { email, password } = req.body;                                               //1
+        const { email, password } = req.body;                                            
                                                   
-        const user = await User.findOne({ email });                                         //2 user.findone()
+        const user = await User.findOne({ email });                                      
         if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
-        const isMatch = await bcrypt.compare(password, user.password);                      //special
+        const isMatch = await bcrypt.compare(password, user.password);                 
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-// login ke otp ka logic ( makes no sense here as i have given password already here )       //l otp
+//  login ke otp send karne ka logic 
 
-        if (!user.isVerified && user.role !== 'admin') {
+        if (!user.isVerified && user.role !== 'admin') {                                   
             const otp = generateOTP();
-            await OTP.findOneAndDelete({ email: user.email, action: 'account_verification' });
+            await OTP.findOneAndDelete({ email: user.email, action: 'account_verification' });  
             await OTP.create({ email: user.email, otp, action: 'account_verification' });
             await sendOTPEmail(user.email, otp, 'account_verification');
-            return res.status(403).json({ message: 'Account not verified', needsVerification: true, email: user.email });
+            return res.status(403).json({ message: 'Account not verified', needsVerification: true, email: user.email }); 
         }
 
-        res.json({                                                                            //rcr
-            _id: user.id,
+        res.json({                                                                         
+            _id: user.id,                                                                     
             name: user.name,
             email: user.email,
             role: user.role,
@@ -79,18 +80,19 @@ exports.login = async (req, res) => {
 
 exports.verifyOTP = async (req, res) => {
     try {
-        const { email, otp } = req.body;                                                     //1
+        const { email, otp } = req.body;                                                    
 
-        const validOTP = await OTP.findOne({ email, otp, action: 'account_verification' });  //2a OTP.findone()
+        const validOTP = await OTP.findOne({ email, otp, action: 'account_verification' }); 
+        if (!user) return res.status(400).json({ message: 'Invalid credentials' });
          if (!validOTP) {
             return res.status(400).json({ message: 'Invalid or expired OTP' });
         }
 
-        const user = await User.findOneAndUpdate({ email }, { isVerified: true }, { new: true });//2b user.findoneandUpdate()
-        await OTP.deleteOne({ _id: validOTP._id }); 
+        const user = await User.findOneAndUpdate({ email }, { isVerified: true }, { new: true });
+        await OTP.deleteOne({ _id: validOTP._id });                                         
         console.log(await OTP.find());
 
-        res.json({                                                                            //rcr
+        res.json({                                                                            
             _id: user.id,
             name: user.name,
             email: user.email,
@@ -99,7 +101,6 @@ exports.verifyOTP = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
-    }
-}; 
-// saare controllers functions mai se sir login aur verifyOTP ke rcr ke 1r mai id name email role token itni values pass hogi
-// frontend mai authcontext mai jo pass krvaya tha vhi lena hai req.body se
+    }};
+
+

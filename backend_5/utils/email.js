@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// i think sendingOTPemail is enough sendBookingemail not required
+
 
 const sendBookingEmail = async (userEmail, userName, eventTitle) => {
     try {
@@ -22,7 +22,7 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
             html: `
         <h2>Hi ${userName}!</h2>
         <p>Your booking for the event <strong>${eventTitle}</strong> is successfully confirmed.</p>
-        <p>Thank you for choosing Eventora.</p>
+        <p>Thank you for choosing Evenix.</p>
       `
         };
         await transporter.sendMail(mailOptions);
@@ -34,9 +34,9 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
 
 const sendOTPEmail = async (userEmail, otp, type) => {
     try {
-        const title = type === 'account_verification' ? 'Verify your Eventora Account' : 'Eventora Booking Verification';
+        const title = type === 'account_verification' ? 'Verify your Evenix Account' : 'Evenix Booking Verification';
         const msg = type === 'account_verification'
-            ? 'Please use the following OTP to verify your new Eventora account.'
+            ? 'Please use the following OTP to verify your new Evenix account.'
             : 'Please use the following OTP to verify and confirm your event booking.';
 
         const mailOptions = {

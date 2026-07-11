@@ -20,7 +20,7 @@ const UserDashboard = () => {
     }, [user, navigate]);
 
 
-    const fetchBookings = async () => {                                   {/* fetch data from /bookings */}
+    const fetchBookings = async () => {                                 
         try {
             const { data } = await api.get('/bookings/my'); 
           setBookings(data);
@@ -33,7 +33,7 @@ const UserDashboard = () => {
         }
     };
 
-    const cancelBooking = async (id) => {                                  {/* cancle booking at /bookings */}
+    const cancelBooking = async (id) => {                            
         if (window.confirm('Are you sure you want to cancel this booking request?')) 
            { try {
                 await api.delete(`/bookings/${id}`);
